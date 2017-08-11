@@ -25,6 +25,9 @@ Route::get('/hours', function () {
 
 Route::get('/teams','TeamController@index')->name('teams');
 Route::post('/add_team','TeamController@store')->name('add_team');
+Route::get('/delete_team/{id}','TeamController@destroy')->name('delete_team');
+Route::get('/edit_team/{id}','TeamController@edit')->name('edit_team');
+Route::post('/update_team/{id}','TeamController@update')->name('update_team');
 
 Route::get('/users', function () {
     return view('main');

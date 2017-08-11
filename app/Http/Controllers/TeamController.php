@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Team as Team;
+
 class TeamController extends Controller
 {
     /**
@@ -13,7 +15,8 @@ class TeamController extends Controller
      */
     public function index()
     {
-        return view('layouts.teams.list');
+        $teams = Team::all();
+        return view('layouts.teams.list',['teams' => $teams]);
     }
 
     /**
@@ -38,6 +41,12 @@ class TeamController extends Controller
             'team_name' => 'required|max:255',
             'active' => 'boolean',
         ]);
+        
+        $team = new Team;
+        $team->team_name = $request->team_name;
+        $team->active = is_null($request->active) ? 0:$request->active;
+        $team->save();
+        return response(['success' => 'Team added !!!'], 200);
     }
 
     /**
@@ -59,7 +68,8 @@ class TeamController extends Controller
      */
     public function edit($id)
     {
-        //
+        $team = Team::findOrFail($id);
+        return view('layouts.teams.edit',['team' => $team]);
     }
 
     /**
@@ -71,7 +81,17 @@ class TeamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         //validate requests
+        $this->validate($request, [
+            'team_name' => 'required|max:255',
+            'active' => 'boolean',
+        ]);
+        
+        $team = Team::find($id);
+        $team->team_name = $request->team_name;
+        $team->active = is_null($request->active) ? 0:$request->active;
+        $team->save();
+        return response(['success' => 'Team updated !!!'], 200);
     }
 
     /**
@@ -82,6 +102,7 @@ class TeamController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Team::destroy($id);
+        return redirect()->route('teams',['message' => 'Team deleted !!!']);
     }
 }
