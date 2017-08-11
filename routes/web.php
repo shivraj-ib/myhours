@@ -12,5 +12,28 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('main');
+})->name('home');
+
+Route::get('/profile', function () {
+    return view('main');
+})->name('profile');
+
+Route::get('/hours', function () {
+    return view('main');
+})->name('hours');
+
+Route::get('/teams','TeamController@index')->name('teams');
+Route::post('/add_team','TeamController@store')->name('add_team');
+
+Route::get('/users', function () {
+    return view('main');
+})->name('users');
+
+Route::get('/roles', function () {
+    return view('main');
+})->name('roles');
+
+Route::get('/permissions', function () {
+    return view('main');
+})->name('permissions');
