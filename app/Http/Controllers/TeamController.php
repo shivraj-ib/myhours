@@ -16,17 +16,13 @@ class TeamController extends Controller
     public function index()
     {
         $teams = Team::all();
-        return view('layouts.teams.list',['teams' => $teams]);
+        return view('layouts.teams.main',['teams' => $teams]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    
+    public function listTeams()
     {
-        //
+        $teams = Team::all();
+        return view('layouts.teams.list',['teams' => $teams]);
     }
 
     /**
@@ -47,17 +43,6 @@ class TeamController extends Controller
         $team->active = is_null($request->active) ? 0:$request->active;
         $team->save();
         return response(['success' => 'Team added !!!'], 200);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -103,6 +88,6 @@ class TeamController extends Controller
     public function destroy($id)
     {
         Team::destroy($id);
-        return redirect()->route('teams',['message' => 'Team deleted !!!']);
+        return response(['success' => 'Team deleted !!!'], 200);
     }
 }

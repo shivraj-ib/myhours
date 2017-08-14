@@ -1,14 +1,13 @@
 <!-- Modal -->
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="addModal" role="dialog">
     <div class="modal-dialog">    
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add New Team</h4>
-            </div>
-            <div class="form-success"></div>
-            <form method="POST" action="#" id="add_team_form">
+            </div>            
+            <form method="POST" action="#" id="add_form">
                 {{ csrf_field() }}
                 <div class="modal-body">
                     <div class="form-group">

@@ -24,6 +24,7 @@ Route::get('/hours', function () {
 })->name('hours');
 
 Route::get('/teams','TeamController@index')->name('teams');
+Route::get('/teams-list','TeamController@listTeams')->name('teams-list');
 Route::post('/add_team','TeamController@store')->name('add_team');
 Route::get('/delete_team/{id}','TeamController@destroy')->name('delete_team');
 Route::get('/edit_team/{id}','TeamController@edit')->name('edit_team');

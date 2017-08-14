@@ -14,12 +14,3 @@ and open the template in the editor.
     color: #fff;
     padding-left: 10px;
 }
-
-.form-success {
-    display: none;
-    color: #fff;
-    background: #629a62;
-    font-size: bold;
-    font-weight: bold;
-    padding: 7px 10px 7px 10px;
-}
