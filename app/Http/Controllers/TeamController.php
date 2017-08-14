@@ -9,6 +9,16 @@ use App\Team as Team;
 class TeamController extends Controller
 {
     /**
+     * public array of form fields
+     * @return array
+     */
+    public $fields = [
+        'team_name' => ['type' => 'text', 'class' => '', 'id' => 'team_name', 'lable' => 'Team Name','value'=>''],
+        'active' => ['type' => 'checkbox', 'class' => '', 'id' => 'active', 'lable' => 'Activiate Now','def_value'=>1,'value'=>''],
+        'action' => ['type' => 'hidden', 'class' => '', 'id' => 'action', 'lable' => '','value' => '']
+    ];
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -16,13 +26,18 @@ class TeamController extends Controller
     public function index()
     {
         $teams = Team::all();
-        return view('layouts.teams.main',['teams' => $teams]);
+        $formDetails = ['type' => 'add','title'=>'Add New Team'];
+        $this->fields['action']['value'] = route('add_team');
+        $this->fields['active']['value'] = 1;
+        $columns = ['id' => 'ID', 'team_name' => 'Team Name','active' => 'Status','updated_at' => 'Last Updated' ];
+        return view('layouts.teams.main',['columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields]);
     }
     
     public function listTeams()
     {
         $teams = Team::all();
-        return view('layouts.teams.list',['teams' => $teams]);
+        $columns = ['id' => 'ID', 'team_name' => 'Team Name','active' => 'Status','updated_at' => 'Last Updated' ];
+        return view('layouts.teams.list',['columns' => $columns,'teams' => $teams]);
     }
 
     /**
@@ -53,8 +68,12 @@ class TeamController extends Controller
      */
     public function edit($id)
     {
-        $team = Team::findOrFail($id);
-        return view('layouts.teams.edit',['team' => $team]);
+        $team = Team::findOrFail($id);        
+        $this->fields['team_name']['value'] = $team->team_name;
+        $this->fields['active']['value'] = $team->active;
+        $this->fields['action']['value'] = route('update_team',$id);
+        $formDetails = ['type' => 'edit','title'=>'Edit Team'];
+        return view('layouts.teams.edit',['formDetails' => $formDetails,'fields' => $this->fields]);
     }
 
     /**

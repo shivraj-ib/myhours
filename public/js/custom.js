@@ -4,23 +4,24 @@
 var global_form_error = 'oops !!! something went wrong.';
 
 $(document).ready(function () {
-    $('#data-table-list').DataTable();
-    console.log($('form#add_form input[name="action"]').val());
+    $('#data-table-list').DataTable();    
     ajaxFormRequest('#add_form', '#addModal', $('form#add_form input[name="action"]').val());
 
     $(document).on('click', 'a.delete-item', function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
         var title = $(this).attr('title');
-        var confirmModal = $('#confirm').modal();
+        var confirmModal = $('#confirm');
         $("div.modal-body",confirmModal).html("Delete "+title+". Are you sure ?");
-        confirmModal.on('click', '#delete', function (e) {
-            ajaxDeleteRecord(url);
-         });
+        confirmModal.modal().one('click', '#delete', function () {
+            ajaxDeleteRecord(url);            
+        });
     });
 
     $(document).on('click', 'a.edit-item', function (e) {
         e.preventDefault();
+        //remove older edit modal
+        $('#editModal').remove();
         ajaxEditRecord($(this).attr('href'));
     });
 
@@ -83,8 +84,8 @@ function ajaxDeleteRecord(request_url) {
         error: function () {
             $.notify(global_form_error);
         },
-        success: function (data) {
-            $('#confirm').modal('hide');
+        success: function (data) {     
+            $('#confirm').modal('hide');            
             $.notify(data.success, 'success');
             refreshList();
         },

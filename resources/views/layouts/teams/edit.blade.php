@@ -5,23 +5,40 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Update Team</h4>
-            </div>           
+                <h4 class="modal-title">{{$formDetails['title']}}</h4>
+            </div>
             <form method="POST" action="" id="edit_form">
                 {{ csrf_field() }}
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="team_name">Team Name</label>
-                        <input type="text" class="form-control" id="team_name" name="team_name" value="{{$team->team_name}}">
-                    </div>
-                    <div class="checkbox">
-                        <label for="active">
-                            <input type="checkbox" value="1" id="active" name="active" @if($team->active == 1) checked @endif>Activiate Now
-                        </label>
-                    </div>                                   
+                    @foreach ($fields as $key => $field)
+                        @if ($field['type'] == 'text')
+                            <div class="form-group">
+                                <label for="{{$key}}">{{$field['lable']}}</label>
+                                <input type="text" class="form-control {{$field['class']}}" value="{{$field['value']}}" id="{{$field['id']}}" name="{{$key}}">
+                            </div>
+                        @elseif ($field['type'] == 'checkbox')
+                            <div class="checkbox">
+                                <label for="{{$key}}">
+                                    <input type="checkbox" value="{{$field['def_value']}}" class="{{$field['class']}}" id="{{$field['id']}}" name="{{$key}}" @if($field['def_value'] == $field['value']) checked @endif>
+                                    {{$field['lable']}}
+                                </label>
+                            </div>
+                        @elseif ($field['type'] == 'radio')
+                        
+                        @elseif ($field['type'] == 'select')
+                        
+                        @elseif ($field['type'] == 'textarea')
+                        
+                        @elseif ($field['type'] == 'password')
+                        
+                        @elseif ($field['type'] == 'hidden')
+                            <input type="hidden" name="{{$key}}" value="{{$field['value']}}">
+                        @else
+                        
+                        @endif
+                    @endforeach                                
                 </div>
-                <div class="modal-footer">
-                    <input type="hidden" name="action" value="{{route('update_team',$team->id)}}">
+                <div class="modal-footer">                    
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
