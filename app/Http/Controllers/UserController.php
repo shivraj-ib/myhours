@@ -75,7 +75,7 @@ class UserController extends Controller {
         $this->fields['role_id']['def_value'] = $roleOptions;
 
         $this->fields['teams']['value'] = $teamsSelected;
-        $this->fields['role_id']['value'] = $user->role->id;
+        $this->fields['role_id']['value'] = $user->role_id;
 
         return view('layouts.teams.edit', ['user' => $user, 'formDetails' => $formDetails, 'fields' => $this->fields]);
     }
@@ -175,5 +175,11 @@ class UserController extends Controller {
         
         return response(['success' => 'User Added !!!'], 200);
     }
-
+    
+    public function delete($id){
+        $user = User::find($id);
+        $user->teams()->detach();
+        User::destroy($id);
+        return response(['success' => 'User deleted !!!'], 200);
+    }
 }
