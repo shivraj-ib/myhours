@@ -43,7 +43,7 @@ class InstallSchema extends Migration {
                 $table->string('thumb')->nullable();
                 $table->rememberToken();
                 $table->timestamps();
-                $table->integer('role_id')->unsigned();
+                $table->integer('role_id')->unsigned()->nullable();
                 $table->foreign('role_id')->references('id')->on('roles');
                 $table->boolean('active')->default(1);
             });

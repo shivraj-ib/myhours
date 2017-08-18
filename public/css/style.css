@@ -14,3 +14,11 @@ and open the template in the editor.
     color: #fff;
     padding-left: 10px;
 }
+
+.align-right {
+    text-align: right;
+}
+
+.row {
+ padding: 15px 0px 16px 0px;   
+}

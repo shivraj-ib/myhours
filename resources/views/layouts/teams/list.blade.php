@@ -19,13 +19,17 @@
         @foreach ($teams as $team)
         <tr>
             @foreach ($columns as $key => $column)
-            <td>{{$team->$key}}</td>            
+            @if($key == 'active')
+                 <td>@if($team->$key == 1) Active @else Inactive @endif</td>
+               @else 
+               <td>{{$team->$key}}</td>
+            @endif                        
             @endforeach            
             <td>
-                <a href="{{route('edit_team',$team->id)}}" class="edit-item btn">
+                <a href="{{route($links['edit'],$team->id)}}" class="edit-item btn">
                     <span class="glyphicons glyphicons-edit">Edit</span>
                 </a>
-                <a href="{{route('delete_team',$team->id)}}" title="{{$team->team_name}}" class="delete-item btn">
+                <a href="{{route($links['delete'],$team->id)}}" class="delete-item btn">
                     <span class="glyphicons glyphicons-remove-sign">Delete</span>
                 </a>
             </td>

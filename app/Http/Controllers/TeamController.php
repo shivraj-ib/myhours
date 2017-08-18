@@ -26,18 +26,21 @@ class TeamController extends Controller
     public function index()
     {
         $teams = Team::all();
-        $formDetails = ['type' => 'add','title'=>'Add New Team'];
+        $listRoute = route('teams-list');       
+        $formDetails = ['type' => 'add','title'=>'Add New Team','list-route'=>$listRoute];
         $this->fields['action']['value'] = route('add_team');
         $this->fields['active']['value'] = 1;
+        $links = array('edit' => 'edit_team', 'delete' => 'delete_team');
         $columns = ['id' => 'ID', 'team_name' => 'Team Name','active' => 'Status','updated_at' => 'Last Updated' ];
-        return view('layouts.teams.main',['columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields]);
+        return view('layouts.teams.main',['columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields,'links' => $links]);
     }
     
     public function listTeams()
     {
         $teams = Team::all();
+        $links = array('edit' => 'edit_team', 'delete' => 'delete_team');
         $columns = ['id' => 'ID', 'team_name' => 'Team Name','active' => 'Status','updated_at' => 'Last Updated' ];
-        return view('layouts.teams.list',['columns' => $columns,'teams' => $teams]);
+        return view('layouts.teams.list',['columns' => $columns,'teams' => $teams,'links' => $links]);
     }
 
     /**

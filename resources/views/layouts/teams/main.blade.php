@@ -1,18 +1,7 @@
-@extends('main')
-
-@section('addition-assets')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
-<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-<script src="http://malsup.github.io/jquery.form.js"></script>
-@endsection
-
-@section('sidebar')
-@parent    
-@endsection
-
+@extends('layouts.app')
 @section('content')
 <p>You are currently Viewing {{ Route::currentRouteName() }}</p>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">+ Add Team</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">{{$formDetails['title']}}</button>
 @include('layouts.teams.add')
 <div id="confirm" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -25,7 +14,7 @@
         </div>
     </div>
 </div>    
-<div class="list-container" data-route="{{route('teams-list')}}">
-@include('layouts.teams.list')
+<div class="list-container" data-route="{{$formDetails['list-route']}}">
+    @include('layouts.teams.list')
 </div>
 @endsection

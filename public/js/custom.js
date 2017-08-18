@@ -12,7 +12,7 @@ $(document).ready(function () {
         var url = $(this).attr('href');
         var title = $(this).attr('title');
         var confirmModal = $('#confirm');
-        $("div.modal-body",confirmModal).html("Delete "+title+". Are you sure ?");
+        $("div.modal-body",confirmModal).html("Delete, Are you sure ?");
         confirmModal.modal().one('click', '#delete', function () {
             ajaxDeleteRecord(url);            
         });
