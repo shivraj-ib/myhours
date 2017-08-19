@@ -22,6 +22,10 @@ Route::post('/update-profile/{id}','UserController@update')->name('update-profil
 Route::get('/users','UserController@index')->name('users')->middleware('auth');
 Route::get('/users-list','UserController@listUsers')->name('users-list')->middleware('auth');
 Route::post('/add-user','UserController@addUsers')->name('add-user')->middleware('auth');
+Route::post('/add-profile-pic/{id}','UserController@addProfilePic')->name('add-profile-pic')->middleware('auth');
+Route::get('/del-profile-pic/{id}','UserController@delProfilePic')->name('del-profile-pic')->middleware('auth');
+Route::get('/profile-details/{id}','UserController@getProfileDetails')->name('profile-details')->middleware('auth');
+
 
 Route::get('/hours', function () {
     return view('layouts.app');

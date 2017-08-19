@@ -22,3 +22,17 @@ and open the template in the editor.
 .row {
  padding: 15px 0px 16px 0px;   
 }
+
+img.user-avatar {
+    max-width: 300px;
+    height: auto;
+    padding: 0px;
+    margin: 0px auto;
+    display: block;
+}
+
+.col-md-12.avatar-action-btn {
+    margin: 16px 17px 16px 72px;
+    display: block;
+    padding: 0px;
+}

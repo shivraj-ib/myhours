@@ -6,6 +6,7 @@ var global_form_error = 'oops !!! something went wrong.';
 $(document).ready(function () {
     $('#data-table-list').DataTable();    
     ajaxFormRequest('#add_form', '#addModal', $('form#add_form input[name="action"]').val());
+    ajaxFormRequest('#upload_profile_pic', '#profilePicModal', $('form#upload_profile_pic input[name="action"]').val());
 
     $(document).on('click', 'a.delete-item', function (e) {
         e.preventDefault();
@@ -56,8 +57,8 @@ function ajaxFormRequest(form_id, modal_id, request_url) {
         success: function (response) {
             if (response.success) {
                 $.notify(response.success, 'success');
-                if(form_id == '#add_form'){
-                    $("form#add_form")[0].reset();
+                if(form_id == '#add_form' || form_id == '#upload_profile_pic'){
+                    $(form_id)[0].reset();
                 }
                 $(modal_id).modal('hide');
                 refreshList();

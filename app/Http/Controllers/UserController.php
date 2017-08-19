@@ -7,6 +7,7 @@ use App\User as User;
 use App\Team as Team;
 use App\Role as Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller {
 
@@ -179,7 +180,42 @@ class UserController extends Controller {
     public function delete($id){
         $user = User::find($id);
         $user->teams()->detach();
+        if (!is_null($user->thumb)) {
+            Storage::delete('public' + $user->thumb);
+        }  
         User::destroy($id);
         return response(['success' => 'User deleted !!!'], 200);
+    }
+    
+    public function addProfilePic(Request $request, $id) {
+        //validate requests
+        $this->validate($request, [
+            'thumb' => 'required|image|max:2000',            
+        ]);
+        
+        
+        $user = User::find($id);
+        if (!is_null($user->thumb)) {
+            Storage::delete('public' + $user->thumb);
+        }
+        $path = $request->file('thumb')->store('public/profile_pic');
+        $user->thumb = trim($path, 'public');
+        $user->save();
+        return response(['success' => 'Image Uploaded !!!'], 200);
+    }
+    
+    public function delProfilePic($id){
+        $user = User::find($id);
+        if (!is_null($user->thumb)) {
+            Storage::delete('public' + $user->thumb);
+        }        
+        $user->thumb = null;
+        $user->save();
+        return response(['success' => 'Image Removed !!!'], 200);
+    }
+    
+    public function getProfileDetails($id){
+        $user = User::find($id);
+        return view('auth.profile-details',['user' => $user]);
     }
 }
