@@ -24,4 +24,10 @@ class Role extends Model
     {
         return $this->hasMany('App\User');
     }
+    
+    public function setRoleNameAttribute($value)
+    {
+        $this->attributes['role_name'] = $value;
+        $this->attributes['role_slug'] = strtolower(preg_replace('/\s+/', '_', $value));
+    }
 }

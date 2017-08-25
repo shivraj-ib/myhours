@@ -63,7 +63,9 @@
                     <strong>Role</strong>
                 </div>
                 <div class="col-md-8">
+                    @isset($user->role->role_name)
                     {{$user->role->role_name}}
+                    @endisset
                 </div>
             </div>
             <div class="row">

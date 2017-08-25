@@ -16,6 +16,7 @@ class InstallSchema extends Migration {
             Schema::create('roles', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('role_name');
+                $table->string('role_slug');
                 $table->boolean('active')->default(1);
                 $table->timestamps();
             });
@@ -30,6 +31,7 @@ class InstallSchema extends Migration {
             Schema::create('permissions', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('perm_name');
+                $table->string('perm_slug');
                 $table->boolean('active')->default(1);
                 $table->timestamps();
             });
@@ -39,7 +41,7 @@ class InstallSchema extends Migration {
                 $table->string('name');
                 $table->string('email')->unique();
                 $table->string('password');
-                $table->integer('phone')->nullable();
+                $table->bigInteger('phone')->nullable();
                 $table->string('thumb')->nullable();
                 $table->rememberToken();
                 $table->timestamps();
@@ -62,6 +64,7 @@ class InstallSchema extends Migration {
                 $table->foreign('user_id')->references('id')->on('users');
                 $table->string('title');
                 $table->longText('content');
+                $table->float('time', 8, 2);
                 $table->date('activity_date');
                 $table->timestamps();
             });

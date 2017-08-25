@@ -11,48 +11,58 @@
                 {{ csrf_field() }}
                 <div class="modal-body">
                     @foreach ($fields as $key => $field)
-                        @if ($field['type'] == 'text')
-                            <div class="form-group">
-                                <label for="{{$key}}">{{$field['lable']}}</label>
-                                <input type="text" class="form-control {{$field['class']}}" value="{{$field['value']}}" id="{{$field['id']}}" name="{{$key}}">
-                            </div>
-                        @elseif ($field['type'] == 'checkbox')                            
-                            <div class="checkbox">
-                                <label for="{{$key}}">
-                                    <input type="checkbox" value="{{$field['def_value']}}" class="{{$field['class']}}" id="{{$field['id']}}" name="{{$key}}" @if($field['def_value'] == $field['value']) checked @endif>
-                                    {{$field['lable']}}
-                                </label>
-                            </div>
-                        @elseif ($field['type'] == 'checkbox-group') 
-                        @isset($field['def_value'])
-                            <label for="{{$key}}">{{$field['lable']}}</label><br>                            
+                    @php
+                       $disabled = '';
+                       if(isset($field['disabled']) && !empty($field['disabled'] === true)){
+                          $disabled = 'disabled';
+                       }
+                    @endphp
+                    @if ($field['type'] == 'text')
+                    <div class="form-group">
+                        <label for="{{$key}}">{{$field['lable']}}</label>
+                        <input {{$disabled}} type="text" class="form-control {{$field['class']}}" value="{{$field['value']}}" id="{{$field['id']}}" name="{{$key}}">
+                    </div>
+                    @elseif ($field['type'] == 'checkbox')                            
+                    <div class="checkbox">
+                        <label for="{{$key}}">
+                            <input {{$disabled}} type="checkbox" value="{{$field['def_value']}}" class="{{$field['class']}}" id="{{$field['id']}}" name="{{$key}}" @if($field['def_value'] == $field['value']) checked @endif>
+                                   {{$field['lable']}}
+                        </label>
+                    </div>
+                    @elseif ($field['type'] == 'checkbox-group') 
+                    @isset($field['def_value'])
+                    <label for="{{$key}}">{{$field['lable']}}</label><br>                            
+                    @foreach($field['def_value'] as $options)
+                    <label class="checkbox-inline"><input {{$disabled}} type="checkbox" class="{{$field['class']}}" name="{{$key}}[]" value="{{$options['value']}}" @isset($field['value']) @if(in_array($options['value'],$field['value'])) checked @endif @endisset>{{$options['lable']}}</label>
+                    @endforeach 
+                    @endisset    
+                    @elseif ($field['type'] == 'radio')
+
+                    @elseif ($field['type'] == 'select')
+                    @isset($field['def_value'])
+                    <div class="form-group">
+                        <label for="{{$key}}">{{$field['lable']}}</label>
+                        <select {{$disabled}} class="form-control {{$field['class']}}" id="{{$field['id']}}" name="{{$key}}">>
+                            <option value="">Please select</option>
                             @foreach($field['def_value'] as $options)
-                                <label class="checkbox-inline"><input type="checkbox" class="{{$field['class']}}" name="{{$key}}[]" value="{{$options['value']}}" @isset($field['value']) @if(in_array($options['value'],$field['value'])) checked @endif @endisset>{{$options['lable']}}</label>
-                            @endforeach 
-                        @endisset    
-                        @elseif ($field['type'] == 'radio')
-                        
-                        @elseif ($field['type'] == 'select')
-                        @isset($field['def_value'])
-                            <div class="form-group">
-                                <label for="{{$key}}">{{$field['lable']}}</label>
-                                <select class="form-control {{$field['class']}}" id="{{$field['id']}}" name="{{$key}}">>
-                                    <option value="">Please select</option>
-                                    @foreach($field['def_value'] as $options)
-                                         <option value="{{$options['value']}}" @if(isset($field['value']) && $field['value'] == $options['value']) selected @endif>{{$options['lable']}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endisset
-                        @elseif ($field['type'] == 'textarea')
-                        
-                        @elseif ($field['type'] == 'password')
-                        
-                        @elseif ($field['type'] == 'hidden')
-                            <input type="hidden" name="{{$key}}" value="{{$field['value']}}">
-                        @else
-                        
-                        @endif
+                            <option value="{{$options['value']}}" @if(isset($field['value']) && $field['value'] == $options['value']) selected @endif>{{$options['lable']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endisset
+                    @elseif ($field['type'] == 'text-area')
+                    <div class="form-group">
+                        <label for="{{$key}}">{{$field['lable']}}</label>
+                        <textarea {{$disabled}} class="{{$field['class']}}" id="{{$field['id']}}" rows="5" name="{{$key}}">{{$field['value']}}</textarea>
+                    </div>
+
+                    @elseif ($field['type'] == 'password')
+
+                    @elseif ($field['type'] == 'hidden')
+                    <input type="hidden" name="{{$key}}" value="{{$field['value']}}">
+                    @else
+
+                    @endif
                     @endforeach                                
                 </div>
                 <div class="modal-footer">                    

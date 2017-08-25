@@ -10,7 +10,8 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>        
         <link rel="stylesheet" href="{{ asset('/css/style.css') }}">        
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">        
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
@@ -71,7 +72,12 @@
                     </div>
                 </div>
             </nav> 
-            <div class="container-fluid">            
+            <div class="container-fluid">
+               @if($errors->any())
+                <div class="alert alert-danger">              
+                    <h4>{{$errors->first()}}</h4>            
+                </div>
+                @endif
                 <div class="row">
                     @if(Auth::check())
                     @section('sidebar')
@@ -84,8 +90,8 @@
                                 <a href="{{route('profile',Auth::user()->id)}}">Profile</a>
                             </li>
                             <li role="presentation" class="@if (Route::currentRouteName() == 'hours') active @endif">
-                                <a href="{{route('hours')}}">Hours</a>
-                            </li>
+                                <a href="{{route('hours',Auth::user()->id)}}">My Hours</a>
+                            </li>                            
                             <li role="presentation" class="@if (Route::currentRouteName() == 'teams') active @endif">
                                 <a href="{{route('teams')}}">Manage Teams</a>
                             </li>
@@ -104,7 +110,7 @@
                     @endif
                     <div class="col-sm-9" style="background-color:lavenderblush;">
                         <div class="main-container">
-                            @yield('content')                        
+                            @yield('content')                      
                         </div>    
                     </div>
                 </div>
@@ -113,6 +119,7 @@
         <script src="{{ asset('js/app.js') }}"></script>        
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
         <script src="http://malsup.github.io/jquery.form.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="{{ asset('/js/custom.js') }}"></script>
         <script src="{{ asset('/js/notify.js') }}"></script>
     </body>

@@ -6,6 +6,17 @@ use Illuminate\Http\Request;
 use App\Permission as Permission;
 
 class PermissionController extends Controller {
+    
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('role_permission');
+    }
 
     /**
      * public array of form fields

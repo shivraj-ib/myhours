@@ -14,4 +14,10 @@ class Permission extends Model
     {
         return $this->belongsToMany('App\Role','role_permission');
     }
+    
+    public function setPermNameAttribute($value)
+    {
+        $this->attributes['perm_name'] = $value;
+        $this->attributes['perm_slug'] = strtolower(preg_replace('/\s+/', '_', $value));
+    }
 }

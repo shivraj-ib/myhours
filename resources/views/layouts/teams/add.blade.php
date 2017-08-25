@@ -45,8 +45,11 @@
 
                     @elseif ($field['type'] == 'select')
 
-                    @elseif ($field['type'] == 'textarea')
-                    
+                    @elseif ($field['type'] == 'text-area')
+                    <div class="form-group">
+                        <label for="{{$key}}">{{$field['lable']}}</label>
+                        <textarea class="{{$field['class']}}" id="{{$field['id']}}" rows="5" name="{{$key}}">{{$field['value']}}</textarea>
+                    </div>                    
                     @elseif ($field['type'] == 'strictly-hidden')
 
                     @elseif ($field['type'] == 'password')
