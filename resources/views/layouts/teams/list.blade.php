@@ -1,6 +1,7 @@
 @if (Route::currentRouteName() == 'hours' || Route::currentRouteName() == 'hours-list')
 <div class="table-filter">
-    <form class="form-inline">
+    <form class="form-inline" method="POST" action="{{route('export_hour',$user_id)}}">
+        {{ csrf_field() }}  
         <div class="form-group">
             <label for="email">Filter By Activity Date From:</label>
             <input type="text" class="datepicker form-control" id="date_from" name="date_from">
@@ -8,8 +9,9 @@
         <div class="form-group">
             <label for="email">To:</label>
             <input type="text" class="datepicker form-control" id="date_to" name="date_to">
-        </div>        
-        <button type="button" class="btn btn-default" id="reset-table">Reset</button>
+        </div>
+        <button type="submit" class="btn btn-primary" id="reset-table">Export</button>
+        <button type="button" class="btn btn-default" id="reset-table">Reset</button>        
     </form>
 </div>
 @endif
@@ -41,13 +43,14 @@
                <td>{{$team->$key}}</td>
             @endif                        
             @endforeach            
-            <td>                
-                <a href="{{route($links['edit'],$team->id)}}" class="edit-item btn">
-                    <span class="glyphicons glyphicons-edit">Edit</span>
+            <td>
+                @foreach($links as $link)
+                @if($link['active'] == 1)
+                <a href="{{route($link['route_name'],$team->id)}}" class="{{$link['class']}}" title="{{$link['title']}}">
+                    <i class="{{$link['icons']}}"></i>
                 </a>
-                <a href="{{route($links['delete'],$team->id)}}" class="delete-item btn">
-                    <span class="glyphicons glyphicons-remove-sign">Delete</span>
-                </a>                
+                @endif
+                @endforeach                              
             </td>
         </tr>
         @endforeach

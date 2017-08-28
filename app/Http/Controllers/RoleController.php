@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use App\Role as Role;
 use App\Permission as Permission;
 
@@ -30,6 +30,26 @@ class RoleController extends Controller
         'active' => ['type' => 'checkbox', 'class' => '', 'id' => 'active', 'lable' => 'Activiate Now','def_value'=>1,'value'=>''],
         'action' => ['type' => 'hidden', 'class' => '', 'id' => 'action', 'lable' => '','value' => '']
     ];
+    
+    /**
+     * public list actions
+     */
+    public $list_actions = [
+            'edit' => ['title' => 'Edit Role', 'icons' => 'fa fa-pencil-square-o' , 'class' => 'edit-item btn' , 'route_name' => 'edit_role','active' => 1,
+                'permissions' => ['all','role_edit']],
+            'delete' => ['title' => 'Delete Role', 'icons' => 'fa fa-trash-o' , 'class' => 'delete-item btn', 'route_name' => 'delete_role','active' => 1,
+                'permissions' => ['all','role_delete']]            
+        ];
+    
+    /**
+     * public allowed permissions to add new record
+     */
+    public $add_new_permissions = ['all','role_add'];
+    
+    /**
+     * allow current user to add new record
+     */
+    public $allow_new = true;
 
     /**
      * Display a listing of the resource.
@@ -56,7 +76,7 @@ class RoleController extends Controller
         $this->fields['active']['value'] = 1;
         $this->fields['permissions']['def_value'] = $permissionArray;
         $columns = ['id' => 'ID', 'role_name' => 'Role Name','permission' => 'Permissions','active' => 'Status','updated_at' => 'Last Updated'];
-        $links = array('edit' => 'edit_role', 'delete' => 'delete_role');
+        $links = $this->getActionLinks();
         
         foreach($teams as $team){
             foreach($team->permissions as $permission){
@@ -66,14 +86,14 @@ class RoleController extends Controller
             $team->permission = trim($team->permission,', ');
         }
         
-        return view('layouts.teams.main',['columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields ,'links' => $links]);
+        return view('layouts.teams.main',['add_new' => $this->allow_new,'columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields ,'links' => $links]);
     }
     
     public function listRoles()
     {
         $teams = Role::with('permissions')->get();
         $columns = ['id' => 'ID', 'role_name' => 'Role Name','permission' => 'Permissions','active' => 'Status','updated_at' => 'Last Updated' ];
-        $links = array('edit' => 'edit_role', 'delete' => 'delete_role');
+        $links = $this->getActionLinks();
         
         foreach($teams as $team){
             foreach($team->permissions as $permission){
@@ -174,5 +194,27 @@ class RoleController extends Controller
         $team = $team->permissions()->detach();
         Role::destroy($id);
         return response(['success' => 'Role deleted !!!'], 200);
+    }
+    
+    private function getActionLinks(){
+        $user_permissions = [];
+        foreach(Auth::User()->role->permissions as $permission){
+            $user_permissions[] = $permission->perm_slug;           
+        }
+        
+        //check if add new record allowed
+        $add_permissions = array_intersect($this->add_new_permissions,$user_permissions);        
+        if(empty($add_permissions)){
+            $this->allow_new = false;
+        }
+        
+        //check for action buttons permission on list page
+        foreach($this->list_actions as $key => $action){
+            $result=array_intersect($action['permissions'],$user_permissions);            
+            if(empty($result)){
+               $this->list_actions[$key]['active'] = 0;
+            }
+        }
+        return $this->list_actions;
     }
 }

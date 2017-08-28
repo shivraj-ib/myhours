@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use App\Team as Team;
 
 class TeamController extends Controller
@@ -29,6 +29,27 @@ class TeamController extends Controller
         'active' => ['type' => 'checkbox', 'class' => '', 'id' => 'active', 'lable' => 'Activiate Now','def_value'=>1,'value'=>''],
         'action' => ['type' => 'hidden', 'class' => '', 'id' => 'action', 'lable' => '','value' => '']
     ];
+    
+    
+    /**
+     * public list actions
+     */
+    public $list_actions = [
+            'edit' => ['title' => 'Edit Team', 'icons' => 'fa fa-pencil-square-o' , 'class' => 'edit-item btn' , 'route_name' => 'edit_team','active' => 1,
+                'permissions' => ['all','team_edit']],
+            'delete' => ['title' => 'Delete Team', 'icons' => 'fa fa-trash-o' , 'class' => 'delete-item btn', 'route_name' => 'delete_team','active' => 1,
+                'permissions' => ['all','team_delete']]            
+        ];
+    
+    /**
+     * public allowed permissions to add new record
+     */
+    public $add_new_permissions = ['all','team_add'];
+    
+    /**
+     * allow current user to add new record
+     */
+    public $allow_new = true;
 
     /**
      * Display a listing of the resource.
@@ -42,15 +63,15 @@ class TeamController extends Controller
         $formDetails = ['type' => 'add','title'=>'Add New Team','list-route'=>$listRoute];
         $this->fields['action']['value'] = route('add_team');
         $this->fields['active']['value'] = 1;
-        $links = array('edit' => 'edit_team', 'delete' => 'delete_team');
+        $links = $this->getActionLinks();
         $columns = ['id' => 'ID', 'team_name' => 'Team Name','active' => 'Status','updated_at' => 'Last Updated' ];
-        return view('layouts.teams.main',['columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields,'links' => $links]);
+        return view('layouts.teams.main',['add_new' => $this->allow_new,'columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields,'links' => $links]);
     }
     
     public function listTeams()
     {
         $teams = Team::all();
-        $links = array('edit' => 'edit_team', 'delete' => 'delete_team');
+        $links = $this->getActionLinks();
         $columns = ['id' => 'ID', 'team_name' => 'Team Name','active' => 'Status','updated_at' => 'Last Updated' ];
         return view('layouts.teams.list',['columns' => $columns,'teams' => $teams,'links' => $links]);
     }
@@ -123,5 +144,27 @@ class TeamController extends Controller
     {
         Team::destroy($id);
         return response(['success' => 'Team deleted !!!'], 200);
+    }
+    
+    private function getActionLinks(){
+        $user_permissions = [];
+        foreach(Auth::User()->role->permissions as $permission){
+            $user_permissions[] = $permission->perm_slug;           
+        }
+        
+        //check if add new record allowed
+        $add_permissions = array_intersect($this->add_new_permissions,$user_permissions);        
+        if(empty($add_permissions)){
+            $this->allow_new = false;
+        }
+        
+        //check for action buttons permission on list page
+        foreach($this->list_actions as $key => $action){
+            $result=array_intersect($action['permissions'],$user_permissions);            
+            if(empty($result)){
+               $this->list_actions[$key]['active'] = 0;
+            }
+        }
+        return $this->list_actions;
     }
 }

@@ -31,6 +31,26 @@ class HourController extends Controller
         'activity_date' => ['type' => 'text', 'class' => 'datepicker', 'id' => '', 'lable' => 'Activity Date','value'=>''],
         'action' => ['type' => 'hidden', 'class' => '', 'id' => 'action', 'lable' => '','value' => '']
     ];
+    
+    /**
+     * public list actions
+     */
+    public $list_actions = [
+            'edit' => ['title' => 'Edit Hour', 'icons' => 'fa fa-pencil-square-o' , 'class' => 'edit-item btn' , 'route_name' => 'edit_hour','active' => 1,
+                'permissions' => ['all','hour_edit_own','hour_edit']],
+            'delete' => ['title' => 'Delete Hour', 'icons' => 'fa fa-trash-o' , 'class' => 'delete-item btn', 'route_name' => 'delete_hour','active' => 1,
+                'permissions' => ['all','hour_delete_own','hour_delete']]            
+        ];
+    
+    /**
+     * public allowed permissions to add new record
+     */
+    public $add_new_permissions = ['all','hour_add','hour_add_own'];
+    
+    /**
+     * allow current user to add new record
+     */
+    public $allow_new = true;
 
     /**
      * Display a listing of the resource.
@@ -45,9 +65,9 @@ class HourController extends Controller
         $listRoute = route('hours-list',$id);       
         $formDetails = ['type' => 'add','title'=>'Add New Activity','list-route'=>$listRoute];
         $this->fields['action']['value'] = route('add_hour',$id);
-        $links = array('edit' => 'edit_hour', 'delete' => 'delete_hour');
+        $links = $this->getActionLinks();
         $columns = ['id' => 'ID', 'title' => 'Tital','activity_date' => 'Activity Date','time' => 'Hour','updated_at' => 'Last Updated' ];
-        return view('layouts.teams.main',['columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields,'links' => $links]);
+        return view('layouts.teams.main',['add_new' => $this->allow_new,'columns' => $columns,'teams' => $teams,'formDetails' => $formDetails,'fields' => $this->fields,'links' => $links,'user_id'=>$id]);
     }
     
     public function listHours($id = 0)
@@ -56,9 +76,9 @@ class HourController extends Controller
         $teams = Hour::where('user_id', $id)
                ->orderBy('activity_date', 'asc')               
                ->get();
-        $links = array('edit' => 'edit_hour', 'delete' => 'delete_hour');
+        $links = $this->getActionLinks();
         $columns = ['id' => 'ID', 'title' => 'Tital','activity_date' => 'Activity Date','time' => 'Hour','updated_at' => 'Last Updated' ];
-        return view('layouts.teams.list',['columns' => $columns,'teams' => $teams,'links' => $links]);
+        return view('layouts.teams.list',['columns' => $columns,'teams' => $teams,'links' => $links,'user_id'=>$id]);
     }
 
     /**
@@ -140,6 +160,35 @@ class HourController extends Controller
     {
         Hour::destroy($id);
         return response(['success' => 'Activity deleted !!!'], 200);
+    }
+    
+    private function getActionLinks(){
+        $user_permissions = [];
+        foreach(Auth::User()->role->permissions as $permission){
+            $user_permissions[] = $permission->perm_slug;           
+        }
+        
+        //check if add new record allowed
+        $add_permissions = array_intersect($this->add_new_permissions,$user_permissions);        
+        if(empty($add_permissions)){
+            $this->allow_new = false;
+        }
+        
+        //check for action buttons permission on list page
+        foreach($this->list_actions as $key => $action){
+            $result=array_intersect($action['permissions'],$user_permissions);            
+            if(empty($result)){
+               $this->list_actions[$key]['active'] = 0;
+            }
+        }
+        return $this->list_actions;
+    }
+    
+    /*
+     * public function export user hours details
+     */
+    public function exportData(Request $request,$id){
+        dd($request);
     }
 }
 

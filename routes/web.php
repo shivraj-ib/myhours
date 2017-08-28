@@ -33,6 +33,7 @@ Route::post('/add_hour/{id?}','HourController@store')->name('add_hour');
 Route::get('/delete_hour/{id}','HourController@destroy')->name('delete_hour');
 Route::get('/edit_hour/{id}','HourController@edit')->name('edit_hour');
 Route::post('/update_hour/{id}','HourController@update')->name('update_hour');
+Route::post('/export_hour/{id}','HourController@exportData')->name('export_hour');
 
 /** Route for teams **/
 Route::get('/teams','TeamController@index')->name('teams');

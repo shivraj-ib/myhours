@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <p>You are currently Viewing {{ Route::currentRouteName() }}</p>
-@if(Route::currentRouteName() == 'hours' || Auth::user()->role->role_slug == 'admin')
+@if($add_new === true)
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">{{$formDetails['title']}}</button>
 @endif
 @include('layouts.teams.add')

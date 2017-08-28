@@ -10,17 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller {
-
-    /**
-     * Instantiate a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct() {
-        $this->middleware('auth');
-        $this->middleware('role_permission');
-    }
+class UserController extends Controller {   
 
     /**
      * public array of form fields
@@ -38,12 +28,59 @@ class UserController extends Controller {
         'teams' => ['type' => 'checkbox-group', 'class' => '', 'name' => 'teams', 'id' => 'teams', 'lable' => 'Teams'],
         'action' => ['type' => 'hidden', 'class' => '', 'id' => 'action', 'lable' => '', 'value' => '']
     ];
+    
+    /**
+     * public list actions
+     */
+    public $list_actions = [
+            'edit' => ['title' => 'Edit User', 'icons' => 'fa fa-pencil-square-o' , 'class' => 'edit-item btn' , 'route_name' => 'edit-profile','active' => 1,
+                'permissions' => ['all','user_edit']],
+            'delete' => ['title' => 'Delete User', 'icons' => 'fa fa-trash-o' , 'class' => 'delete-item btn', 'route_name' => 'delete-user','active' => 1,
+                'permissions' => ['all','user_delete']],
+            'profile' => ['title' => 'View Profile', 'icons' => 'fa fa-user' ,'class' => 'btn', 'route_name' => 'profile','active' => 1,
+                'permissions' => ['all','user_view','view_member_profile']],
+            'hours' => ['title' => 'View Hours', 'icons' => 'fa fa-clock-o' ,'class' => 'btn', 'route_name' => 'hours','active' => 1,
+                'permissions' => ['all','hour_view','hour_view_team']]
+        ];
+    
+    /**
+     * public allowed permissions to add new record
+     */
+    public $add_new_permissions = ['all','user_add'];
+
+
+    /**
+     * allow current user to add new record
+     */
+    public $allow_new = true;
+
+
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth');
+        $this->middleware('role_permission');        
+    }
 
     public function viewProfile($id) {
 
         $user = User::with('teams', 'role')->find($id);
+        
+        $user_permissions = [];
+        foreach(Auth::User()->role->permissions as $permission){
+            $user_permissions[] = $permission->perm_slug;           
+        }
+        
+        $can_edit = ['edit_profile' => false,'add_profile_pic' => false, 'del_profile_pic' => false];
+        
+        if (in_array('all', $user_permissions) || in_array('edit_profile', $user_permissions) || (in_array('manage_own_profile', $user_permissions) && $id == Auth::User()->id)) {
+            $can_edit = ['edit_profile' => true, 'add_profile_pic' => true, 'del_profile_pic' => true];
+        }
 
-        return view('auth.profile', ['user' => $user]);
+        return view('auth.profile', ['user' => $user,'can_edit' => $can_edit]);
     }
 
     public function edit($id) {
@@ -167,7 +204,7 @@ class UserController extends Controller {
         $this->fields['password_confirmation']['type'] = 'password';
 
         $columns = ['id' => 'ID', 'name' => 'Name', 'email' => 'Email', 'active' => 'Status', 'team' => 'Team'];
-        $links = array('edit' => 'edit-profile', 'delete' => 'delete-user');
+        $links = $this->getActionLinks();
 
         foreach ($users as $user) {
             foreach ($user->teams as $team) {
@@ -177,13 +214,13 @@ class UserController extends Controller {
             }
             $user->team = trim($user->team, ', ');
         }
-
-        return view('layouts.teams.main', ['columns' => $columns, 'teams' => $users, 'formDetails' => $formDetails, 'fields' => $this->fields, 'links' => $links]);
+        $this->getActionLinks();
+        return view('layouts.teams.main', ['add_new' => $this->allow_new,'columns' => $columns,'test' => $this->list_actions ,'teams' => $users, 'formDetails' => $formDetails, 'fields' => $this->fields, 'links' => $links]);
     }
 
     public function listUsers() {
         $columns = ['id' => 'ID', 'name' => 'Name', 'email' => 'Email', 'active' => 'Status', 'team' => 'Team'];
-        $links = array('edit' => 'edit-profile', 'delete' => 'delete-user');
+        $links = $this->getActionLinks();
 
         //get all users under team lead id
         $user_role = Auth::user()->role->role_slug;
@@ -284,7 +321,31 @@ class UserController extends Controller {
 
     public function getProfileDetails($id) {
         $user = User::find($id);
+        
+        
+        
         return view('auth.profile-details', ['user' => $user]);
     }
-
+    
+    private function getActionLinks(){
+        $user_permissions = [];
+        foreach(Auth::User()->role->permissions as $permission){
+            $user_permissions[] = $permission->perm_slug;           
+        }
+        
+        //check if add new record allowed
+        $add_permissions = array_intersect($this->add_new_permissions,$user_permissions);        
+        if(empty($add_permissions)){
+            $this->allow_new = false;
+        }
+        
+        //check for action buttons permission on list page
+        foreach($this->list_actions as $key => $action){
+            $result=array_intersect($action['permissions'],$user_permissions);            
+            if(empty($result)){
+               $this->list_actions[$key]['active'] = 0;
+            }
+        }
+        return $this->list_actions;
+    }
 }
