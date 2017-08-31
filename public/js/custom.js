@@ -190,3 +190,31 @@ $(document).on('change','#date_from, #date_to',function(){
 $(document).on('click',"#reset-table",function(){
     $('#date_from, #date_to').val('').trigger('change');
 });
+
+/*****Export Hours********************/
+//$("form#export_form").ajaxForm({
+//    url: $(this).attr('action'),
+//    data: $(this).serializeArray(),
+//    type: 'POST',
+//    dataType: 'json',
+//    beforeSubmit: function () {
+//        $('.validation-error').remove();
+//    },
+//    success: function (response) {
+//        if (response.success) {
+//            $.notify(response.success, 'success');            
+//        } else if (response.error) {
+//            $.notify(response.error);
+//        } else {
+//            $.notify(global_form_error);
+//        }
+//    },
+//    error: function (response) {
+//        $.notify(global_form_error);
+//        $.each(response, function () {
+//            $.each(this, function (field, error) {
+//                $("form#export_form input[name='" + field + "'],select[name='" + field + "'],textarea[name='" + field + "']").after('<div class="validation-error">' + error + '</div>');
+//            });
+//        });
+//    }
+//});

@@ -12,7 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('layouts.app');
+    if(Auth::check()){
+        return redirect()->route('hours',Auth::Id());
+    }else{
+        return redirect()->route('login');
+    }
 })->name('home');
 
 Route::get('/profile/{id}','UserController@viewProfile')->name('profile');

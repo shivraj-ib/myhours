@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller {   
+class UserController extends Controller {
 
     /**
      * public array of form fields
@@ -203,7 +203,7 @@ class UserController extends Controller {
         $this->fields['password']['type'] = 'password';
         $this->fields['password_confirmation']['type'] = 'password';
 
-        $columns = ['id' => 'ID', 'name' => 'Name', 'email' => 'Email', 'active' => 'Status', 'team' => 'Team'];
+        $columns = ['id' => 'ID', 'name' => 'Name', 'email' => 'Email', 'active' => 'Status','role' => 'Role', 'team' => 'Team'];
         $links = $this->getActionLinks();
 
         foreach ($users as $user) {
@@ -213,6 +213,11 @@ class UserController extends Controller {
                 $user->team .= $team->team_name . ', ';
             }
             $user->team = trim($user->team, ', ');
+        }
+        foreach ($users as $user) {         
+            
+                $user->role = $user->role->role_name;               
+
         }
         $this->getActionLinks();
         return view('layouts.teams.main', ['add_new' => $this->allow_new,'columns' => $columns,'test' => $this->list_actions ,'teams' => $users, 'formDetails' => $formDetails, 'fields' => $this->fields, 'links' => $links]);
@@ -320,11 +325,19 @@ class UserController extends Controller {
     }
 
     public function getProfileDetails($id) {
-        $user = User::find($id);
+        $user = User::find($id);        
         
+        foreach($user->role->permissions as $permission){
+            $user_permissions[] = $permission->perm_slug;           
+        }
         
+        $can_edit = ['edit_profile' => false,'add_profile_pic' => false, 'del_profile_pic' => false];
         
-        return view('auth.profile-details', ['user' => $user]);
+        if (in_array('all', $user_permissions) || in_array('edit_profile', $user_permissions) || (in_array('manage_own_profile', $user_permissions) && $id == Auth::User()->id)) {
+            $can_edit = ['edit_profile' => true, 'add_profile_pic' => true, 'del_profile_pic' => true];
+        }
+        
+        return view('auth.profile-details', ['user' => $user,'can_edit' => $can_edit]);
     }
     
     private function getActionLinks(){

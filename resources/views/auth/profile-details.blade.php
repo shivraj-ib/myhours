@@ -1,25 +1,25 @@
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-4">
             <div class="row">
                 <div class="col-md-12">
                     <img class="user-avatar" src="@if(null !== $user->thumb) {{asset('storage/'.$user->thumb)}} @else {{asset('storage/avatar.png')}} @endif">
                 </div>
-                <div class="col-md-12 avatar-action-btn">
+                <div class="avatar-action-btn">
                     @if($can_edit['add_profile_pic'])
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#profilePicModal">Upload</button>
+                    <i title="Edit" data-toggle="modal" data-target="#profilePicModal" class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
                     @endif
                     @if($can_edit['del_profile_pic'])
-                    <a class="btn btn-danger delete-item" href="{{route('del-profile-pic',$user->id)}}" class="delete-item btn">Remove</a>
+                    <a title="Remove" class="delete-item" href="{{route('del-profile-pic',$user->id)}}" class="delete-item btn"><i class="fa fa-times fa-2x" aria-hidden="true"></i></a>
                     @endif
                 </div>
             </div>            
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             <div class="row">
             <div class="col-md-4 pull-right">
                 @if($can_edit['edit_profile'])
-                <a href="{{route('edit-profile',$user->id)}}" class="btn btn-primary edit-item btn">
-                    <span class="glyphicons glyphicons-edit">Edit</span>
+                <a href="{{route('edit-profile',$user->id)}}" class="edit-item" title="Edit Profile">
+                    <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
                 </a>
                 @endif
             </div>

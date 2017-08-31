@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </nav> 
-            <div class="container-fluid">
+            <div class="container">
                @if($errors->any())
                 <div class="alert alert-danger">              
                     <h4>{{$errors->first()}}</h4>            
@@ -82,34 +82,50 @@
                 <div class="row">
                     @if(Auth::check())
                     @section('sidebar')
-                    <div class="col-sm-3" style="background-color:lavender;">
-                        <ul class="nav nav-pills nav-stacked">                            
-                            <li role="presentation" class="@if (Route::currentRouteName() == 'home') active @endif">
-                                <a href="{{route('home')}}">Home</a>
-                            </li>
+                    @php
+                    $user_permissions = [];
+                    foreach(Auth::User()->role->permissions as $permission){
+                        $user_permissions[] = $permission->perm_slug;           
+                    }
+                    @endphp
+                    <div class="col-sm-3 menu-container">
+                        <ul class="nav nav-pills nav-stacked">
                             <li role="presentation" class="@if (Route::currentRouteName() == 'profile') active @endif">
                                 <a href="{{route('profile',Auth::user()->id)}}">Profile</a>
                             </li>
                             <li role="presentation" class="@if (Route::currentRouteName() == 'hours') active @endif">
                                 <a href="{{route('hours',Auth::user()->id)}}">My Hours</a>
-                            </li>                            
+                            </li>
+                            @if(in_array('team_view', $user_permissions))
                             <li role="presentation" class="@if (Route::currentRouteName() == 'teams') active @endif">
                                 <a href="{{route('teams')}}">Manage Teams</a>
                             </li>
+                            @endif
+                            @if(in_array('user_view', $user_permissions))
                             <li role="presentation" class="@if (Route::currentRouteName() == 'users') active @endif">
                                 <a href="{{route('users')}}">Manage Users</a>
                             </li>
+                            @endif
+                            @if(in_array('team_view_own', $user_permissions))
+                            <li role="presentation" class="@if (Route::currentRouteName() == 'users') active @endif">
+                                <a href="{{route('users')}}">My Team</a>
+                            </li>
+                            @endif
+                            @if(in_array('role_view', $user_permissions))                            
                             <li role="presentation" class="@if (Route::currentRouteName() == 'roles') active @endif">
                                 <a href="{{route('roles')}}">Manage User Roles</a>
                             </li>
+                            @endif
+                            @if(in_array('permission_view', $user_permissions))
                             <li role="presentation" class="@if (Route::currentRouteName() == 'permissions') active @endif">
                                 <a href="{{route('permissions')}}">Manage Permissions</a>
-                            </li>                            
+                            </li>
+                            @endif
                         </ul>
                     </div>
                     @show
                     @endif
-                    <div class="col-sm-9" style="background-color:lavenderblush;">
+                    <div class="col-sm-9" style="background-color: #eaeaea;">
                         <div class="main-container">
                             @yield('content')                      
                         </div>    

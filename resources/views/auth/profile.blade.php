@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="container list-container" data-route="{{route('profile-details',$user->id)}}">
+<div class="list-container" data-route="{{route('profile-details',$user->id)}}">
     <h1>Profile</h1>
     @include('auth.profile-details')
 </div>

@@ -44,5 +44,20 @@ use AuthenticatesUsers;
     protected function credentials(Request $request) {
         return array_merge($request->only($this->username(), 'password'), ['active' => 1]);
     }
+    
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect()->route('login');
+    }
 
 }

@@ -197,8 +197,16 @@ class RolePermission
                 if(in_array('permission_edit', $user_permissions))
                 return true;
                 break;
+            case 'export_hour':
+                if((in_array('export_own_hour', $user_permissions) && $user_id == $record_id) ||
+                   (in_array('hour_export', $user_permissions)) ||
+                   (in_array('export_team_hour', $user_permissions) && $this->isMyTeamMember($record_id))
+                )
+                return true;
+                break;
             default:
                 return false;
+                break;
         }
 
         return false;

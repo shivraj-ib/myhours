@@ -1,6 +1,6 @@
 @if (Route::currentRouteName() == 'hours' || Route::currentRouteName() == 'hours-list')
 <div class="table-filter">
-    <form class="form-inline" method="POST" action="{{route('export_hour',$user_id)}}">
+    <form class="form-inline" id="export_form" method="POST" action="{{route('export_hour',$user_id)}}">
         {{ csrf_field() }}  
         <div class="form-group">
             <label for="email">Filter By Activity Date From:</label>
@@ -9,8 +9,8 @@
         <div class="form-group">
             <label for="email">To:</label>
             <input type="text" class="datepicker form-control" id="date_to" name="date_to">
-        </div>
-        <button type="submit" class="btn btn-primary" id="reset-table">Export</button>
+        </div>        
+        <button type="submit" class="btn btn-primary">Export</button>
         <button type="button" class="btn btn-default" id="reset-table">Reset</button>        
     </form>
 </div>

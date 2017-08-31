@@ -8,6 +8,13 @@ and open the template in the editor.
     Author     : shivraj
 */
 
+body{
+    color: #2d2d2d !important;
+}
+
+a{
+    color: #0e710e !important;
+}
 
 .validation-error {
     background: #ff6161 !important;
@@ -20,7 +27,7 @@ and open the template in the editor.
 }
 
 .row {
- padding: 15px 0px 16px 0px;   
+    padding: 15px 0px 16px 0px;   
 }
 
 img.user-avatar {
@@ -35,4 +42,56 @@ img.user-avatar {
     margin: 16px 17px 16px 72px;
     display: block;
     padding: 0px;
+}
+
+nav.navbar.navbar-default.navbar-static-top {
+    background: #399a39;    
+}
+
+.navbar-default .navbar-nav>li>a, .navbar-default .navbar-text{
+    color: #fff !important;
+}
+
+.navbar-default .navbar-brand{
+    color: #fff !important;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+    background-color: #3e3b3b !important;    
+}
+
+.menu-container ul li{
+    background: #399a39;    
+}
+
+.menu-container a{
+    color: #fff !important;  
+}
+
+.menu-container a:hover{
+    background-color: #3e3b3b !important;   
+}
+
+li.active > a{
+    background-color: #3e3b3b !important;   
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #0e710e !important;
+    border-color: #fff !important;
+    border-radius: 0px !important;
+}
+
+.avatar-action-btn {
+    position: absolute;    
+    right: 0%;    
+}
+
+.avatar-action-btn i{
+    cursor: pointer;
+}
+
+a.delete-item i{
+    color: #545151;
 }
