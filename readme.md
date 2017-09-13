@@ -1,24 +1,18 @@
 =====Installation=============
-1. Composer should be installed.
-2. First, download the Laravel installer using Composer:
-   Command: composer global require "laravel/installer"
+1. Clone Files on local/server by command.
+   git clone https://github.com/shivraj-ib/myhours.git
 
-3. Create new laravel project using below command.
-   Command: laravel new blog(name of you project)
+2. Set database configuration in .env file.
 
-4. Update composer.json file to install only required libraries.
+3. Run command : composer install.
 
-5. Run command: composer install.
+4. Install application by running the below command.
+   Got to root director where application is cloned from git.
+   Run command php artisan migrate:refresh --seed
 
-6. Rename .env.example file in root dir to .env.
+5. Start server by command : php artisan serve
 
-7. If .env file is missing. first check it this file is hidden if not then add a new .env file with below code
-    https://raw.githubusercontent.com/laravel/laravel/master/.env.example
-8. Run command: php artisan key:generate
-
-9. Start laravel run command: php artisan serev
-
-10. Ready to roll!!!!!!!
+6. Ready to roll!!!!
 
 ==========Database Configuration==========================
 1. Set database details in .env file

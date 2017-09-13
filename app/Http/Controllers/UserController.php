@@ -189,6 +189,7 @@ class UserController extends Controller {
                 ->orderBy('role_name', 'asc')
                 ->get();
 
+        $teamOptions = [];
         foreach ($teams as $team) {
             $teamOptions[] = ['value' => $team->id, 'lable' => $team->team_name];
         }
