@@ -96,12 +96,12 @@
                             <li role="presentation" class="@if (Route::currentRouteName() == 'hours') active @endif">
                                 <a href="{{route('hours',Auth::user()->id)}}">My Hours</a>
                             </li>
-                            @if(in_array('team_view', $user_permissions))
+                            @if(in_array('all', $user_permissions) || in_array('team_view', $user_permissions))
                             <li role="presentation" class="@if (Route::currentRouteName() == 'teams') active @endif">
                                 <a href="{{route('teams')}}">Manage Teams</a>
                             </li>
                             @endif
-                            @if(in_array('user_view', $user_permissions))
+                            @if(in_array('all', $user_permissions) || in_array('user_view', $user_permissions))
                             <li role="presentation" class="@if (Route::currentRouteName() == 'users') active @endif">
                                 <a href="{{route('users')}}">Manage Users</a>
                             </li>
@@ -111,12 +111,12 @@
                                 <a href="{{route('users')}}">My Team</a>
                             </li>
                             @endif
-                            @if(in_array('role_view', $user_permissions))                            
+                            @if(in_array('all', $user_permissions) || in_array('role_view', $user_permissions))                            
                             <li role="presentation" class="@if (Route::currentRouteName() == 'roles') active @endif">
                                 <a href="{{route('roles')}}">Manage User Roles</a>
                             </li>
                             @endif
-                            @if(in_array('permission_view', $user_permissions))
+                            @if(in_array('all', $user_permissions) || in_array('permission_view', $user_permissions))
                             <li role="presentation" class="@if (Route::currentRouteName() == 'permissions') active @endif">
                                 <a href="{{route('permissions')}}">Manage Permissions</a>
                             </li>
@@ -125,11 +125,19 @@
                     </div>
                     @show
                     @endif
-                    <div class="col-sm-9" style="background-color: #eaeaea;">
+                    <div class="col-sm-9">
                         <div class="main-container">
                             @yield('content')                      
                         </div>    
                     </div>
+                </div>
+            </div>
+            <!---footer--->
+            <div class="footer-container">
+                <div class="container-fluid">
+                    <div class="container">                    
+                       COPYRIGHT © 2017 My Hours, ALL RIGHTS RESERVED.
+                    </div>             
                 </div>
             </div>
         </div>

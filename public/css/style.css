@@ -16,6 +16,18 @@ a{
     color: #0e710e !important;
 }
 
+.list-container {    
+    padding: 7px;
+    background: #eaeaea;
+}
+
+div#data-table-list_wrapper {
+    padding-top: 27px;
+    padding-bottom: 27px;
+    border-top: 1px solid #ccc;
+    margin-top: 17px;
+}
+
 .validation-error {
     background: #ff6161 !important;
     color: #fff;
@@ -94,4 +106,11 @@ li.active > a{
 
 a.delete-item i{
     color: #545151;
+}
+
+.footer-container {
+    border: 0;
+    background: #656060;
+    color: #fff;
+    text-align: center;
 }
