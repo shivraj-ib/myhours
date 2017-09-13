@@ -1,58 +1,31 @@
 =====Installation=============
-1. Composer should be installed.
-2. First, download the Laravel installer using Composer:
-   Command: composer global require "laravel/installer"
+1. Clone Files on local/server by command.
+   git clone https://github.com/shivraj-ib/myhours.git
 
-3. Create new laravel project using below command.
-   Command: laravel new blog(name of you project)
+2. Set database configuration in .env file.
 
-4. Update composer.json file to install only required libraries.
+3. Run command : composer install.
 
-5. Run command: composer install.
+4. Install application by running the below command.
+   Got to root director where application is cloned from git.
+   Run command php artisan migrate:refresh --seed
 
-6. Rename .env.example file in root dir to .env.
+5. Start server by command : php artisan serve
 
-7. If .env file is missing. first check it this file is hidden if not then add a new .env file with below code
-===================================================================
-APP_NAME=Laravel
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_LOG_LEVEL=debug
-APP_URL=http://localhost
+6. Ready to roll!!!!
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=homestead
-DB_USERNAME=homestead
-DB_PASSWORD=secret
-
-BROADCAST_DRIVER=log
-CACHE_DRIVER=file
-SESSION_DRIVER=file
-QUEUE_DRIVER=sync
-
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-
-MAIL_DRIVER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-
-PUSHER_APP_ID=
-PUSHER_APP_KEY=
-PUSHER_APP_SECRET=
-===================================================================
-
-8. Run command: php artisan key:generate
-
-9. Start laravel run command: php artisan serev
-
-10. Ready to roll!!!!!!!
-
+==========Database Configuration==========================
+1. Set database details in .env file
+2. Run command hp artisan migrate to create initial schema.
+==========Database Schema============================
+1.Tables
+  a. Authentication related tables. users and password_resets
+  b. teams 
+  c. roles 
+  d. permissions 
+  e. hours 
+  f. user_team 
+  g. role_permission 
+  h. user_role
+=====================================================
 
