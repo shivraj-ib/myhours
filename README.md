@@ -18,14 +18,13 @@
 1. Set database details in .env file
 2. Run command hp artisan migrate to create initial schema.
 ==========Database Schema============================
-1.Tables
-  a. Authentication related tables. users and password_resets
-  b. teams 
-  c. roles 
-  d. permissions 
-  e. hours 
-  f. user_team 
-  g. role_permission 
-  h. user_role
+ 1. users
+ 2. teams 
+ 3. roles 
+ 4. permissions 
+ 5. hours 
+ 6. user_team 
+ 7. role_permission 
+ 8. user_role
 =====================================================
 
